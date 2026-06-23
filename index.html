@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EnerVerse - Smart Renewable Energy Park Ecosystem</title>
+    <!-- Google Fonts: Orbitron & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Three.js and OrbitControls CDNs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    
+    <!-- Local Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Background Canvas for Animated Energy Particles -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Header Navigation -->
+    <header class="main-header">
+        <div class="logo-container">
+            <div class="logo-glow-dot"></div>
+            <span class="logo-text">ENER<span class="highlight">VERSE</span></span>
+        </div>
+        <nav class="nav-links">
+            <button class="nav-tab active" data-tab="landing">Home</button>
+            <button class="nav-tab" data-tab="about">About</button>
+            <button class="nav-tab" data-tab="simulation">3D Sandbox</button>
+            <button class="nav-tab" data-tab="dashboard">Command Centre</button>
+        </nav>
+        <div class="header-status">
+            <div class="status-indicator">
+                <span class="status-dot pulsing"></span>
+                <span class="status-text">GRID ONLINE</span>
+            </div>
+            <div class="sim-clock" id="header-clock">12:00 PM</div>
+        </div>
+    </header>
+
+    <!-- App Content Wrapper -->
+    <main class="content-wrapper">
+
+        <!-- 1. LANDING PAGE -->
+        <section id="landing-tab" class="tab-content active">
+            <div class="hero-section">
+                <div class="hero-content">
+                    <div class="cyber-badge">SYSTEM STAGE: ACTIVE PROTOCOL</div>
+                    <h1 class="hero-title">ENER<span class="text-glow">VERSE</span></h1>
+                    <p class="hero-tagline">Transforming Parks into Smart Renewable Energy Hubs</p>
+                    <p class="hero-desc">An eco-futuristic grid system combining solar structures, wind turbines, kinetic paths, and smart telemetry to power the cities of tomorrow.</p>
+                    <div class="hero-actions">
+                        <button class="btn btn-primary btn-glow" onclick="switchTab('about')">
+                            <span>Explore Project</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                        <button class="btn btn-secondary" onclick="switchTab('simulation')">
+                            <span>Enter Simulation</span>
+                            <i class="fa-solid fa-vr-cardboard"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <!-- Holographic Energy Sphere Container -->
+                    <div class="holo-sphere-wrapper">
+                        <canvas id="holo-sphere"></canvas>
+                        <div class="holo-ring outer"></div>
+                        <div class="holo-ring inner"></div>
+                        <div class="holo-data-overlay">
+                            <span class="label">SPHERE STATUS</span>
+                            <span class="value green-glow">STABLE</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Ticker -->
+            <div class="stats-ticker-container">
+                <div class="ticker-card">
+                    <div class="ticker-icon"><i class="fa-solid fa-bolt"></i></div>
+                    <div class="ticker-info">
+                        <span class="ticker-label">LIVE POWER RATE</span>
+                        <span class="ticker-value green-glow" id="live-power-ticker">124.5 kW</span>
+                    </div>
+                </div>
+                <div class="ticker-card">
+                    <div class="ticker-icon"><i class="fa-solid fa-battery-three-quarters"></i></div>
+                    <div class="ticker-info">
+                        <span class="ticker-label">BATTERY STORAGE</span>
+                        <span class="ticker-value" id="live-battery-ticker">84.2%</span>
+                    </div>
+                </div>
+                <div class="ticker-card">
+                    <div class="ticker-icon"><i class="fa-solid fa-leaf"></i></div>
+                    <div class="ticker-info">
+                        <span class="ticker-label">CO2 OFFSET TODAY</span>
+                        <span class="ticker-value cyan-glow" id="live-co2-ticker">384.6 kg</span>
+                    </div>
+                </div>
+                <div class="ticker-card">
+                    <div class="ticker-icon"><i class="fa-solid fa-car-on"></i></div>
+                    <div class="ticker-info">
+                        <span class="ticker-label">EV CHARGERS ACTIVE</span>
+                        <span class="ticker-value" id="live-ev-ticker">2 / 4</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature Cards Section -->
+            <div class="features-section">
+                <h2 class="section-title">Park Infrastructure Modules</h2>
+                <p class="section-subtitle">Integrating clean energy harvesting directly into public recreational spaces</p>
+                
+                <div class="features-grid">
+                    <!-- Solar Canopy -->
+                    <div class="feature-card">
+                        <div class="feature-glow-bg"></div>
+                        <div class="feature-icon"><i class="fa-solid fa-solar-panel"></i></div>
+                        <h3>Photon Canopy Solar System</h3>
+                        <p>Futuristic shading structures fitted with high-efficiency bifacial solar glass. Generates energy while protecting visitors from weather.</p>
+                        <div class="card-footer-info">
+                            <span class="spec-label">Capacity</span>
+                            <span class="spec-value">120 kWp</span>
+                        </div>
+                    </div>
+                    <!-- WindBloom Turbines -->
+                    <div class="feature-card">
+                        <div class="feature-glow-bg"></div>
+                        <div class="feature-icon"><i class="fa-solid fa-wind"></i></div>
+                        <h3>WindBloom Vertical Turbines</h3>
+                        <p>Silent Vertical Axis Wind Turbines (VAWTs) integrated as aesthetic park art. Captures multidirectional wind streams safely.</p>
+                        <div class="card-footer-info">
+                            <span class="spec-label">Cut-in Speed</span>
+                            <span class="spec-value">1.8 m/s</span>
+                        </div>
+                    </div>
+                    <!-- Battery storage -->
+                    <div class="feature-card">
+                        <div class="feature-glow-bg"></div>
+                        <div class="feature-icon"><i class="fa-solid fa-database"></i></div>
+                        <h3>Smart Battery Vault</h3>
+                        <p>Subterranean lithium-iron phosphate battery storage. Dynamically balances park load and feeds excess back to the city grid.</p>
+                        <div class="card-footer-info">
+                            <span class="spec-label">Capacity</span>
+                            <span class="spec-value">500 kWh</span>
+                        </div>
+                    </div>
+                    <!-- Command Centre -->
+                    <div class="feature-card">
+                        <div class="feature-glow-bg"></div>
+                        <div class="feature-icon"><i class="fa-solid fa-gauge-high"></i></div>
+                        <h3>EnerVerse Command Centre</h3>
+                        <p>Real-time analytics engine and AI manager adjusting grid output, dimming streetlights, and managing EV charge rates.</p>
+                        <div class="card-footer-info">
+                            <span class="spec-label">Sensor Latency</span>
+                            <span class="spec-value">&lt; 100ms</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. ABOUT PAGE -->
+        <section id="about-tab" class="tab-content">
+            <div class="about-container">
+                <div class="about-hero">
+                    <h2 class="section-title">The Blueprint of Clean Cities</h2>
+                    <p class="section-subtitle">Fusing public recreation with advanced microgrid engineering</p>
+                </div>
+
+                <!-- Section 1, 2, 3 Layout -->
+                <div class="about-top-grid">
+                    <!-- Section 1: What is EnerVerse? -->
+                    <div class="glass-panel what-is-card">
+                        <div class="card-icon-header">
+                            <i class="fa-solid fa-circle-info text-glow"></i>
+                            <h3>What is EnerVerse?</h3>
+                        </div>
+                        <p>EnerVerse is a smart renewable energy park ecosystem that transforms public parks into energy-producing infrastructure. By integrating power generation, energy storage, dynamic light-networks, and automated telemetry, we turn passive community parks into active, self-sustaining green power generators for municipal grids.</p>
+                        
+                        <div class="what-is-specs">
+                            <div class="wi-spec">
+                                <span class="wi-label">Park Integration</span>
+                                <span class="wi-value green-glow">Non-Intrusive</span>
+                            </div>
+                            <div class="wi-spec">
+                                <span class="wi-label">Ecosystem Target</span>
+                                <span class="wi-value cyan-glow">Net-Zero Cities</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 2 & 3: Problem vs Solution -->
+                    <div class="challenge-solution-container">
+                        <!-- Section 2: Problem -->
+                        <div class="glass-panel problem-card">
+                            <div class="card-icon-header">
+                                <i class="fa-solid fa-triangle-exclamation icon-problem"></i>
+                                <h3>The Problem</h3>
+                            </div>
+                            <p>Conventional parks consume electricity for lighting, water systems, and facilities, but rarely generate it. This places an unproductive load on municipal grids, exacerbates urban greenhouse gas footprints, and leaves massive open spaces underutilized for local power harvesting.</p>
+                        </div>
+                        
+                        <!-- Section 3: Solution -->
+                        <div class="glass-panel solution-card">
+                            <div class="card-icon-header">
+                                <i class="fa-solid fa-lightbulb icon-solution"></i>
+                                <h3>The Solution</h3>
+                            </div>
+                            <p>EnerVerse integrates renewable energy generation, battery storage, environmental monitoring, and real-time analytics. Every public asset is retrofitted into a micro-generator, saving municipal costs and supplying clean energy directly to electric vehicles, lighting networks, and city grids.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 4: Core Technologies -->
+                <div class="core-tech-section">
+                    <h3 class="subsection-title">Core Technologies</h3>
+                    <p class="section-subtitle">The modular pillars of the EnerVerse grid</p>
+                    
+                    <div class="core-tech-grid">
+                        <!-- 1. Photon Canopy Solar System -->
+                        <div class="tech-card">
+                            <div class="tech-card-glow"></div>
+                            <div class="tech-card-icon"><i class="fa-solid fa-solar-panel"></i></div>
+                            <h4>Photon Canopy Solar System</h4>
+                            <p>Futuristic shading structures fitted with high-efficiency bifacial solar glass. Generates clean power while sheltering park visitors.</p>
+                            <div class="tech-card-tag">GENERATION</div>
+                        </div>
+
+                        <!-- 2. WindBloom Vertical Turbines -->
+                        <div class="tech-card">
+                            <div class="tech-card-glow"></div>
+                            <div class="tech-card-icon"><i class="fa-solid fa-wind"></i></div>
+                            <h4>WindBloom Vertical Turbines</h4>
+                            <p>Artistic Vertical Axis Wind Turbines (VAWTs). Silent, bird-safe, and capable of capturing omnidirectional wind streams.</p>
+                            <div class="tech-card-tag">GENERATION</div>
+                        </div>
+
+                        <!-- 3. Battery Storage -->
+                        <div class="tech-card">
+                            <div class="tech-card-glow"></div>
+                            <div class="tech-card-icon"><i class="fa-solid fa-database"></i></div>
+                            <h4>Battery Storage System</h4>
+                            <p>Subterranean lithium-iron phosphate battery vaults. Stores daily generation surges and feeds city microgrids during peak demand.</p>
+                            <div class="tech-card-tag">STORAGE</div>
+                        </div>
+
+                        <!-- 4. Smart Lighting -->
+                        <div class="tech-card">
+                            <div class="tech-card-glow"></div>
+                            <div class="tech-card-icon"><i class="fa-solid fa-lightbulb"></i></div>
+                            <h4>Smart Lighting</h4>
+                            <p>Motion-sensitive, auto-dimming LED meshes. Scales consumption down to 10% during quiet hours, reducing waste.</p>
+                            <div class="tech-card-tag">INFRASTRUCTURE</div>
+                        </div>
+
+                        <!-- 5. Water Monitoring -->
+                        <div class="tech-card">
+                            <div class="tech-card-glow"></div>
+                            <div class="tech-card-icon"><i class="fa-solid fa-droplet"></i></div>
+                            <h4>Water Monitoring</h4>
+                            <p>IoT hydrology sensors tracking rainfall, soil moisture, and pond filtration quality to manage park irrigation.</p>
+                            <div class="tech-card-tag">ENVIRONMENT</div>
+                        </div>
+
+                        <!-- 6. Interactive Digital Twin -->
+                        <div class="tech-card">
+                            <div class="tech-card-glow"></div>
+                            <div class="tech-card-icon"><i class="fa-solid fa-vr-cardboard"></i></div>
+                            <h4>Interactive Digital Twin</h4>
+                            <p>A WebGL-based virtual counterpart mapping live sensory signals of physical wind, sun, and ground steps.</p>
+                            <div class="tech-card-tag">SOFTWARE</div>
+                        </div>
+
+                        <!-- 7. EnerVerse Command Centre -->
+                        <div class="tech-card">
+                            <div class="tech-card-glow"></div>
+                            <div class="tech-card-icon"><i class="fa-solid fa-gauge-high"></i></div>
+                            <h4>EnerVerse Command Centre</h4>
+                            <p>Real-time analytics engine and control panel allowing operators to toggle presets and adjust grid feeds.</p>
+                            <div class="tech-card-tag">CONTROL</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom Row: Sustainability Calculator -->
+                <div class="calc-section-wrapper">
+                    <div class="glass-panel calc-panel">
+                        <h3>Sustainability Calculator</h3>
+                        <p class="panel-desc">Estimate the renewable energy potential of your local public park project.</p>
+                        
+                        <div class="calc-grid-layout">
+                            <div class="calc-form">
+                                <div class="form-group">
+                                    <label for="park-acres">Park Size (Acres)</label>
+                                    <div class="range-input-container">
+                                        <input type="range" id="park-acres" min="1" max="50" value="10">
+                                        <span class="range-val" id="park-acres-val">10 Acres</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="foot-traffic">Daily Foot Traffic (Est.)</label>
+                                    <div class="range-input-container">
+                                        <input type="range" id="foot-traffic" min="500" max="10000" step="500" value="2500">
+                                        <span class="range-val" id="foot-traffic-val">2500 People</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="solar-coverage">Solar Canopy Coverage (%)</label>
+                                    <div class="range-input-container">
+                                        <input type="range" id="solar-coverage" min="5" max="50" step="5" value="15">
+                                        <span class="range-val" id="solar-coverage-val">15%</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="calc-divider-vert"></div>
+
+                            <div class="calc-results">
+                                <div class="result-box">
+                                    <span class="res-num cyan-glow" id="calc-gen">248 MWh</span>
+                                    <span class="res-label">Est. Annual Generation</span>
+                                </div>
+                                <div class="result-box">
+                                    <span class="res-num green-glow" id="calc-co2">98.4 Tonnes</span>
+                                    <span class="res-label">CO2 Prevented / Yr</span>
+                                </div>
+                                <div class="result-box">
+                                    <span class="res-num" id="calc-ev">18,500</span>
+                                    <span class="res-label">EV Miles Supplied</span>
+                                </div>
+                                <div class="result-box">
+                                    <span class="res-num" id="calc-homes">68</span>
+                                    <span class="res-label">Standard Homes Powered</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 3. 3D SIMULATION PAGE -->
+        <section id="simulation-tab" class="tab-content">
+            <div class="sim-page-container">
+                <!-- Three.js canvas gets mounted here -->
+                <div id="sim-canvas-container">
+                    <div class="canvas-loading" id="sim-loading">
+                        <div class="spinner"></div>
+                        <span>INITIALIZING 3D PARK SANDBOX...</span>
+                    </div>
+                </div>
+
+                <!-- Floating HUD elements -->
+                <div class="hud hud-top-left glass-panel">
+                    <div class="hud-header">
+                        <i class="fa-solid fa-circle-nodes text-glow"></i>
+                        <span>3D PARK TELEMETRY</span>
+                    </div>
+                    <div class="hud-stats">
+                        <div class="hud-stat-item">
+                            <span class="hud-lbl">Solar Canopies</span>
+                            <span class="hud-val yellow-glow" id="hud-solar">45.2 kW</span>
+                        </div>
+                        <div class="hud-stat-item">
+                            <span class="hud-lbl">Wind Turbines</span>
+                            <span class="hud-val cyan-glow" id="hud-wind">38.9 kW</span>
+                        </div>
+                        <div class="hud-stat-item">
+                            <span class="hud-lbl">Kinetic Walkways</span>
+                            <span class="hud-val green-glow" id="hud-kinetic">4.2 kW</span>
+                        </div>
+                        <div class="hud-stat-item">
+                            <span class="hud-lbl">Battery SoC</span>
+                            <span class="hud-val" id="hud-battery">78.5%</span>
+                        </div>
+                    </div>
+                    <div class="hud-footer">
+                        <span>LOD: ULTRA</span>
+                        <span>GRID STABLE</span>
+                    </div>
+                </div>
+
+                <div class="hud hud-top-right glass-panel">
+                    <div class="hud-header">
+                        <i class="fa-solid fa-cloud-sun"></i>
+                        <span>WEATHER ENVIRONMENT</span>
+                    </div>
+                    <div class="weather-selector-grid">
+                        <button class="weather-btn active" data-weather="sunny">
+                            <i class="fa-solid fa-sun"></i><span>SUNNY</span>
+                        </button>
+                        <button class="weather-btn" data-weather="cloudy">
+                            <i class="fa-solid fa-cloud"></i><span>CLOUDY</span>
+                        </button>
+                        <button class="weather-btn" data-weather="windy">
+                            <i class="fa-solid fa-wind"></i><span>WINDY</span>
+                        </button>
+                        <button class="weather-btn" data-weather="stormy">
+                            <i class="fa-solid fa-cloud-showers-water"></i><span>STORMY</span>
+                        </button>
+                    </div>
+                    <div class="hud-divider"></div>
+                    <div class="time-control-group">
+                        <label for="sim-time-slider">SIMULATION TIME</label>
+                        <div class="time-slider-wrapper">
+                            <input type="range" id="sim-time-slider" min="0" max="1439" value="720">
+                            <span id="sim-time-label">12:00 PM</span>
+                        </div>
+                    </div>
+                    <div class="hud-divider"></div>
+                    <button class="btn btn-primary btn-block btn-glow" id="btn-camera-tour">
+                        <i class="fa-solid fa-play"></i><span>RUN DIAGNOSTIC TOUR</span>
+                    </button>
+                </div>
+
+                <!-- Floating Detail Card (Visible on clicking components) -->
+                <div class="glass-panel floating-info-card" id="sim-info-card">
+                    <button class="close-card-btn" id="btn-close-sim-card">&times;</button>
+                    <div class="card-tech-tag" id="sim-card-tag">SYSTEM MODULE</div>
+                    <h3 id="sim-card-title">Photon Canopy</h3>
+                    <div class="sim-card-body">
+                        <p id="sim-card-desc">Primary solar harvesting canopy structures styled with high efficiency double sided solar glass.</p>
+                        <div class="sim-card-specs">
+                            <div class="sim-card-spec">
+                                <span class="lbl">Role</span>
+                                <span class="val" id="sim-card-role">Primary Generation</span>
+                            </div>
+                            <div class="sim-card-spec">
+                                <span class="lbl">Contribution</span>
+                                <span class="val green-glow" id="sim-card-contrib">~75%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary btn-block" id="btn-sim-card-action">OPEN COMMAND CENTRE</button>
+                </div>
+
+                <div class="hud hud-bottom-center">
+                    <div class="mouse-tip">
+                        <i class="fa-solid fa-mouse"></i>
+                        <span>Click components to inspect | Drag: Rotate | Scroll: Zoom</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. COMMAND CENTRE DASHBOARD -->
+        <section id="dashboard-tab" class="tab-content">
+            <div class="dashboard-grid">
+                
+                <div class="glass-panel alerts-panel">
+
+    <div class="panel-header">
+        <h3>System Alerts</h3>
+    </div>
+
+    <div id="system-alerts">
+
+        <div class="alert-item">
+            🟢 Initializing...
+        </div>
+
+    </div>
+
+</div>
+                <!-- Row 1: Telemetry Core Metric Cards -->
+                <div class="metric-card-group">
+                    <div class="glass-panel metric-card">
+                        <div class="m-header">
+                            <span class="m-title">TOTAL GENERATION</span>
+                            <i class="fa-solid fa-bolt icon-solar"></i>
+                        </div>
+                        <div class="m-value green-glow" id="dash-gen-val">88.3 kW</div>
+                        <div class="m-subtitle">Solar + Wind + Kinetic</div>
+                    </div>
+                    <div class="glass-panel metric-card">
+                        <div class="m-header">
+                            <span class="m-title">BATTERY STORAGE</span>
+                            <i class="fa-solid fa-battery-full icon-battery"></i>
+                        </div>
+                        <div class="m-value" id="dash-battery-val">84.2%</div>
+                        <div class="m-subtitle" id="dash-battery-status">CHARGING (+12.4 kW)</div>
+                    </div>
+                    <div class="glass-panel metric-card">
+                        <div class="m-header">
+                            <span class="m-title">PARK CONSUMPTION</span>
+                            <i class="fa-solid fa-lightbulb icon-lighting"></i>
+                        </div>
+                        <div class="m-value orange-glow" id="dash-consume-val">42.8 kW</div>
+                        <div class="m-subtitle">Lighting + EV Chargers + Hubs</div>
+                    </div>
+                    <div class="glass-panel metric-card">
+                        <div class="m-header">
+                            <span class="m-title">NET GRID EXPORT</span>
+                            <i class="fa-solid fa-arrow-right-arrow-left icon-grid"></i>
+                        </div>
+                        <div class="m-value cyan-glow" id="dash-grid-val">+45.5 kW</div>
+                        <div class="m-subtitle" id="dash-grid-status">FEEDING TO MUNICIPALITY</div>
+                    </div>
+                </div>
+
+
+
+                <!-- Row 2: Live Charts & Map Preview Split -->
+                <div class="chart-and-status-row">
+                    <!-- Telemetry Graph -->
+                    <div class="glass-panel chart-panel">
+                        <div class="panel-header">
+                            <h3>Real-Time Telemetry Trend</h3>
+                            <div class="chart-legend">
+                                <span class="legend-dot gen"></span><span>Gen</span>
+                                <span class="legend-dot con"></span><span>Cons</span>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="telemetryChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Mini Status Grid -->
+                    <div class="glass-panel mini-map-panel">
+                        <div class="panel-header">
+                            <h3>Mini Status Grid</h3>
+                            <span class="hud-status-badge green-glow-text">LIVE STREAM</span>
+                        </div>
+                        <div class="status-grid-grid">
+                            <div class="status-cell">
+                                <div class="cell-lbl">Wind Turbines</div>
+                                <div class="cell-status"><i class="fa-solid fa-rotate green-glow-text spinner-slow"></i> ACTIVE</div>
+                                <div class="cell-value" id="cell-wind">32.8 kW</div>
+                            </div>
+                            <div class="status-cell">
+                                <div class="cell-lbl">Solar Arrays</div>
+                                <div class="cell-status" id="cell-solar-status"><i class="fa-solid fa-sun yellow-glow-text"></i> ACTIVE</div>
+                                <div class="cell-value" id="cell-solar">51.2 kW</div>
+                            </div>
+                            <div class="status-cell">
+                                <div class="cell-lbl">Smart Lighting</div>
+                                <div class="cell-status" id="cell-light-status"><i class="fa-solid fa-circle-half-stroke text-glow-text"></i> AUTO DIM (40%)</div>
+                                <div class="cell-value" id="cell-light">6.8 kW</div>
+                            </div>
+                            <div class="status-cell">
+                                <div class="cell-lbl">EV Chargers</div>
+                                <div class="cell-status"><i class="fa-solid fa-car-battery green-glow-text"></i> 2 / 4 LOCKED</div>
+                                <div class="cell-value" id="cell-ev">22.0 kW</div>
+                            </div>
+                        </div>
+                        <div class="grid-sub-info">
+                            <span>System Load Factor: <strong>48.4%</strong></span>
+                            <span>Thermal Load: <strong>32.5°C</strong></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Row 3: Control Override panel & Logger -->
+                <div class="dashboard-controls-row">
+                    <!-- Smart Controls panel -->
+                    <div class="glass-panel control-center-panel">
+                        <h3>Smart Grid Controllers</h3>
+                        <p class="panel-desc">Override autonomous management layers</p>
+                        
+                        <div class="controls-layout">
+                            <div class="ctrl-group">
+                                <div class="ctrl-header">
+                                    <label for="smart-light-dimmer">Lighting Mode</label>
+                                    <button class="toggle-btn active" id="btn-lighting-auto">AUTO</button>
+                                </div>
+                                <div class="slider-wrapper">
+                                    <span class="icon"><i class="fa-solid fa-lightbulb"></i></span>
+                                    <input type="range" id="smart-light-dimmer" min="0" max="100" value="40" disabled>
+                                    <span class="slider-val" id="val-light-dimmer">40%</span>
+                                </div>
+                            </div>
+
+                            <div class="ctrl-group">
+                                <div class="ctrl-header">
+                                    <label for="turbine-pitch">Turbine Pitch Angle</label>
+                                    <span class="badge">AERODYNAMIC</span>
+                                </div>
+                                <div class="slider-wrapper">
+                                    <span class="icon"><i class="fa-solid fa-gauge"></i></span>
+                                    <input type="range" id="turbine-pitch" min="0" max="45" value="15">
+                                    <span class="slider-val" id="val-turbine-pitch">15°</span>
+                                </div>
+                            </div>
+
+                            <div class="ctrl-group">
+                                <div class="ctrl-header">
+                                    <label for="grid-export-limit">Grid Sell-back Threshold</label>
+                                    <span class="badge">ECONOMY</span>
+                                </div>
+                                <div class="slider-wrapper">
+                                    <span class="icon"><i class="fa-solid fa-building-columns"></i></span>
+                                    <input type="range" id="grid-export-limit" min="10" max="90" value="60">
+                                    <span class="slider-val" id="val-export-limit">60% SoC</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+<div class="glass-panel health-panel">
+    <div class="panel-header">
+        <h3>PARK HEALTH</h3>
+    </div>
+
+    <div class="health-item">
+        <span>Generation Efficiency</span>
+        <span id="efficiency-value">92%</span>
+    </div>
+
+    <div class="health-item">
+        <span>Battery Health</span>
+        <span id="battery-health-value">85%</span>
+    </div>
+
+    <div class="health-item">
+        <span>Weather Risk</span>
+        <span id="risk-value">LOW</span>
+    </div>
+
+    <div class="health-item">
+        <span>Grid Stability</span>
+        <span id="stability-value">STABLE</span>
+    </div>
+</div>
+
+                    <!-- Live Logging Terminal -->
+                    <div class="glass-panel logger-panel">
+                        <div class="panel-header">
+                            <h3>Live Event Log</h3>
+                            <button class="clear-log-btn" onclick="clearEventLogs()">Clear</button>
+                        </div>
+                        <div class="log-terminal" id="event-log-container">
+                            <!-- Logs will be prepended here via javascript -->
+                            <div class="log-line"><span class="log-time">[21:16:42]</span> <span class="log-msg sys">System Initialization completed. Connected to municipal grid.</span></div>
+                            <div class="log-line"><span class="log-time">[21:16:44]</span> <span class="log-msg solar">Solar canopies calibration: Optimal. State: Generating.</span></div>
+                            <div class="log-line"><span class="log-time">[21:16:45]</span> <span class="log-msg wind">WindBloom VAWT cluster activated. RPM: 180.</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="cyber-footer">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <span class="logo-text">ENER<span class="highlight">VERSE</span></span>
+                <p>The Future of Smart Park Renewable Energy Systems. Built for clean, resilient, and connected cities.</p>
+            </div>
+            <div class="footer-links">
+                <h4>QUICK LINKS</h4>
+                <ul>
+                    <li><a href="#" onclick="switchTab('landing'); return false;">Home</a></li>
+                    <li><a href="#" onclick="switchTab('about'); return false;">About Specs</a></li>
+                    <li><a href="#" onclick="switchTab('simulation'); return false;">3D Sandbox</a></li>
+                    <li><a href="#" onclick="switchTab('dashboard'); return false;">Command Centre</a></li>
+                </ul>
+            </div>
+            <div class="footer-tech">
+                <h4>CORE TECHNOLOGY</h4>
+                <ul>
+                    <li>Bifacial Solar Canopies</li>
+                    <li>WindBloom Vertical Axis Turbines</li>
+                    <li>Piezoelectric Kinetic Paths</li>
+                    <li>Subterranean Smart Storage</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 EnerVerse Smart City Infrastructure Project. All systems operational.</p>
+            <div class="footer-decor-line"></div>
+        </div>
+    </footer>
+
+    <!-- Script File -->
+    <script src="app.js"></script>
+
+<div style="display:none">
+<span id="pred-gen"></span><span id="pred-battery"></span><span id="pred-demand"></span>
+</div>
+</body>
+</html>
